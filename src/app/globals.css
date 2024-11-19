@@ -2,20 +2,453 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes shiny {
+  0% {
+    background-position: -200% 0;
+  }
+  50% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Apply both shiny and shake animation on hover */
+.hover\:animate-shiny:hover {
+  animation: shiny 3s infinite linear, shake 0.5s ease-in-out; /* Added shake animation */
+  background-size: 400% 400%; /* Keeps the large gradient for smooth animation */
+}
+
+.embla__container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.embla__slide {
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .embla__slide {
+    min-width: 50%;  /* Adjust slides to 50% on medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .embla__slide {
+    min-width: 100%;  /* Adjust slides to 100% on small screens */
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 12px;  /* Set the width of the scrollbar */
+  height: 12px; /* Set the height for horizontal scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4caf50;  /* Set the color of the scrollbar thumb */
+  border-radius: 10px;        /* Set the border radius for rounded corners */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;        /* Set the background color of the track */
+  border-radius: 10px;        /* Set the track border radius */
+}
+
+/* Optional: Custom hover effect for the scrollbar thumb */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #2e7d32;  /* Darker color when hovering */
+}
+
+
+
+/* Poker Table Container */
+.poker-table {
+  position: relative;
+  width: 900px;
+  height: 600px; /* Elongated oval effect */
+  background: linear-gradient(145deg, #2b6e34, #3a8c48); /* Gradient for realism */
+  border-radius: 500px; /* Large border-radius to keep the oval shape */
+  margin: 50px auto;
+  border: 5px solid #006400;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4); /* Deep shadow for depth */
+  overflow: hidden; /* Clean the layout */
+}
+
+/* Seat styles */
+.seat {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  background-color: #333; /* Initial color for seats */
+  border-radius: 50%;
+  border: 3px solid #333;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.seat:hover {
+  background-color: #444555; /* Slightly darker color on hover */
+  cursor: pointer;
+}
+
+/* Positioning each seat around a central area */
+.seat-1 { top: 5%; left: 50%; transform: translateX(-50%); }
+.seat-2 { top: 15%; left: 8%; }
+.seat-3 { top: 15%; left: 92%; transform: translateX(-100%); }
+.seat-4 { bottom: 15%; left: 8%; }
+.seat-5 { bottom: 15%; left: 92%; transform: translateX(-100%); }
+.seat-6 { top: 50%; left: 4%; transform: translateY(-50%); }
+.seat-7 { top: 50%; left: 96%; transform: translateY(-50%) translateX(-100%); }
+.seat-8 { bottom: 5%; left: 50%; transform: translateX(-50%); }
+
+
+/* Card placeholders */
+.card-placeholder {
+  position: absolute;
+  width: 120px;
+  height: 160px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  /* background-image: url('path-to-card-back-image'); Optional: Card back texture */
+  background-size: cover;
+}
+
+/* Community card placeholders (Flop, Turn, River) */
+.community-cards {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: space-evenly;
+  width: 55%;
+  z-index: 3;
+}
+
+.community-card {
+  width: 100px;
+  height: 130px;
+  background: transparent;
+  border: 2px solid #333;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  /* background-image: url('path-to-card-back-image'); Optional: Community card back texture */
+  background-size: cover;
+}
+
+/* Player's facedown cards inside seat container */
+.player-cards {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 60px;  /* Occupy full width of the seat container */
+  z-index: 5;
+}
+
+/* Player 1's cards */
+.seat-1 .player-cards {
+  top: 80px;
+  left: 0px;  /* Custom left offset for Player 1 */
+}
+
+/* Player 2's cards */
+.seat-2 .player-cards {
+  top: 40px;
+  left: 70px;  /* Custom left offset for Player 2 */
+}
+
+/* Player 3's cards */
+.seat-3 .player-cards {
+  top: 40px;
+  left: -65px;  /* Custom left offset for Player 3 */
+}
+
+/* Player 4's cards */
+.seat-4 .player-cards {
+  top: -30px;
+  left: 65px;  /* Custom left offset for Player 4 */
+}
+
+/* Player 5's cards */
+.seat-5 .player-cards {
+  top: -20px;
+  left: -40px;  /* Custom left offset for Player 5 */
+}
+
+/* Player 6's cards */
+.seat-6 .player-cards {
+  top: 10px;
+  left: 70px;  /* Custom left offset for Player 6 */
+}
+
+/* Player 7's cards */
+.seat-7 .player-cards {
+  top: 10px;
+  left: -65px;  /* Custom left offset for Player 7 */
+}
+
+/* Player 8's cards */
+.seat-8 .player-cards {
+  top: -40px;
+  left: 0px;  /* Custom left offset for Player 8 */
+}
+
+/* Each player card */
+.player-card {
+  width: 30px;
+  height: 40px;
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  /* background-image: url('path-to-card-back-image'); Optional: Facedown card texture */
+  background-size: cover;
+}
+
+.back-of-card {
+  background: url('/assets/cards/back.png') no-repeat center center;
+  background-size: cover;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+
+/* Center chip placeholder */
+.center-chip-placeholder {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  border: 2px solid #333; /* Border for chips */
+}
+
+/* Bet Area */
+.bet-area {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 20px;
+}
+
+/* Table Shadow
+.table-shadow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+} */
+
+/* Media queries for responsiveness */
+@media (max-width: 1200px) {
+  .poker-table-wrapper {
+    padding: 20px;
+  }
+
+  .poker-table {
+    transform: scale(0.8); /* Slightly scale down for medium screens */
+  }
+}
+
+@media (max-width: 1000px) {
+  .poker-table-wrapper {
+    padding: 10px;
+  }
+
+  .poker-table {
+    left: -50px;
+    transform: scale(0.5); /* Further scale down for smaller screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .poker-table-wrapper {
+    padding: 5px;
+  }
+
+  .poker-table {
+    left: -50px;
+    transform: scale(0.4); /* Scale down more for very small screens */
+  }
+}
+
+@media (max-width: 400px) {
+  .poker-table-wrapper {
+    padding: 5px;
+  }
+
+  .poker-table {
+    left: -50px;
+    transform: scale(0.5); /* Scale down more for very small screens */
+  }
+}
+
+
+/* Add this to your global stylesheet or tailwind config */
+@keyframes flip {
+  0% {
+    transform: rotateY(0);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+
+/* Poker Table Logo */
+.table-logo {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.table-logo img {
+  width: 120px; /* Adjust size of the logo */
+  height: auto;
+}
+
+/* Timer Display */
+.table-timer {
+  position: absolute;
+  top: 5%;
+  right: 30%;
+  color: white;
+  font-size: 18px;
+  z-index: 10;
+}
+
+/* Pot Amount Display */
+.table-pot {
+  position: absolute;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 10;
+}
+
+/* Lobby Type Label */
+.lobby-label {
+  position: absolute;
+  top: 5%;
+  left: 20%;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 10;
 }
